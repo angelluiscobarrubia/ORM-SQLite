@@ -9,15 +9,15 @@ class SQLite():
         con=sqlite3.connect(self.DIRBD)
         con.commit()
         con.close()
-    
-    '''
-    Metodo utilizado para:
-    1-Crear Tablas
-    2-Adicionar un elemento
-    3-Modificar un elemento
-    3-Eliminar un elemento
-    '''
+        
     def execute(self,script):
+        '''
+        Metodo utilizado para:
+        1-Crear Tablas
+        2-Adicionar un elemento
+        3-Modificar un elemento
+        3-Eliminar un elemento
+        '''
         con=sqlite3.connect(self.DIRBD)
         var_cursor=con.cursor()
         try:
@@ -26,12 +26,12 @@ class SQLite():
             return var_cursor.lastrowid
         except Exception as exc:
             return self.MyException(exc)
-    
-    '''
-    ---Crea una tabla---
-    1-script: script de la tabla
-    '''
+        
     def crearTabla(self,script="TABLA(COL1, COL2)"):
+        '''
+        ---Crea una tabla---
+        1-script: script de la tabla
+        '''
         con=sqlite3.connect(self.DIRBD)        
         try:
         #--Buscando la tabla en la BD--
@@ -47,13 +47,13 @@ class SQLite():
             return True
         except Exception as exc:
             return False
-        
-    '''
-    Inserta un elemento en una tabla
-    tabla: nombre de la Tabla
-    valores: valores de los campos
-    '''
+            
     def insertarElemento(self,tabla='TABLA',*valores):
+        '''
+        Inserta un elemento en una tabla
+        tabla: nombre de la Tabla
+        valores: valores de los campos
+        '''
         con=sqlite3.connect(self.DIRBD)
         try:
             cursor=con.cursor()
@@ -64,13 +64,38 @@ class SQLite():
             return True
         except Exception as exc:
             return False
-
-    '''
-    Inserta varios elementos en una tabla
-    tabla: nombre de la Tabla
-    valores: lista de valores de los campos
-    '''
+    
+    def insertarElementoDict(self,tabla='TABLA',valores = {'columna':'valor'}):
+        '''
+        Inserta un elemento en una tabla
+        tabla: nombre de la Tabla
+        valores: valores de los campos
+        '''
+        con=sqlite3.connect(self.DIRBD)
+        try:
+            cursor=con.cursor()
+            columnas = ""
+            value = ""
+            for key,val in valores.items():
+                columnas += key+','
+                if isinstance(val, str):
+                    value += f'"{val}",'
+                else:
+                    value += f'{val},'
+            script=f'INSERT INTO {tabla}({columnas[:-1]}) values ({value[:-1]})'
+            cursor.execute(script)
+            con.commit()
+            con.close
+            return True
+        except Exception as exc:
+            return False
+    
     def insertarElementos(self,tabla='TABLA',valores=[('val1'),('val2')]):
+        '''
+        Inserta varios elementos en una tabla
+        tabla: nombre de la Tabla
+        valores: lista de valores de los campos
+        '''
         con=sqlite3.connect(self.DIRBD)
         try:
             #--Obteniendo la cantidad de valores por elemento
@@ -90,15 +115,15 @@ class SQLite():
             return True
         except Exception as exc:
             return False
-        
-    '''
-    Modifica los valores de una fila
-    tabla: nombre de la tabla
-    colCond: Columna de la condicion
-    valCond: Valor de la columna del elemento que queremos modificar
-    valores: Diccionario con las columnas y valores que vamos a modificar
-    '''
+            
     def updateElemento(self,tabla,colCond,valCond,**valores):
+        '''
+        Modifica los valores de una fila
+        tabla: nombre de la tabla
+        colCond: Columna de la condicion
+        valCond: Valor de la columna del elemento que queremos modificar
+        valores: Diccionario con las columnas y valores que vamos a modificar
+        '''
         con=sqlite3.connect(self.DIRBD)
         try:
             cursor=con.cursor()    
@@ -123,13 +148,13 @@ class SQLite():
         except Exception as exc:
             return False
         
-    '''
-    Elimina un elemento en una tabla
-    tabla: nombre de la Tabla
-    campo: campo para compara
-    valor: valor que vamos a buscar y eliminar 
-    '''
     def eliminarElemento(self,tabla='TABLA',campo='COLUMNA',valor='0'):
+        '''
+        Elimina un elemento en una tabla
+        tabla: nombre de la Tabla
+        campo: campo para comparar
+        valor: valor que vamos a buscar y eliminar 
+        '''
         con=sqlite3.connect(self.DIRBD)
         try:
             cursor=con.cursor()                           
@@ -144,12 +169,12 @@ class SQLite():
             return True
         except Exception as exc:
             return False
-        
-    '''
-    Devuelve una lista con todos los elementos
-    tabla: nomnre de la tabla
-    '''
+            
     def getFilasTabla(self,tabla='TABLA'):
+        '''
+        Devuelve una lista con todos los elementos
+        tabla: nomnre de la tabla
+        '''
         con=sqlite3.connect(self.DIRBD)
         try:
             var_cursor=con.cursor()
@@ -159,30 +184,24 @@ class SQLite():
             return result
         except Exception as exc:
             return []   
-    
-    '''
-    Devuelve el primer elemento de la consulta ejecutada.
-    '''    
+          
     def sqlGetOne(self,sql):
+        '''Devuelve el primer elemento de la consulta ejecutada.'''  
         con=sqlite3.connect(self.DIRBD)
         var_cursor=con.cursor()
         datos=var_cursor.execute(sql)
         result= datos.fetchone()
-        return result
-  
-    '''
-    Devuelve todos los elementos del sql
-    '''
+        return result[0]
+      
     def sqlGetMany(self,sql):
+        '''Devuelve todos los elementos del sql'''
         con=sqlite3.connect(self.DIRBD)
         var_cursor=con.cursor()
         datos=var_cursor.execute(sql)
         result= datos.fetchall()
         return result
     
-    '''
-    Metodo para procesar las excepciones
-    '''
     def MyException(self,exception):
+        '''Metodo para procesar las excepciones'''
         pass
 
