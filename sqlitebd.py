@@ -18,14 +18,14 @@ class SQLite():
     3-Eliminar un elemento
     '''
     def execute(self,script):
-            con=sqlite3.connect(self.DIRBD)
-            var_cursor=con.cursor()
-            try:
-                var_cursor.execute(script)
-                con.commit()
-                return var_cursor.lastrowid
-            except Exception as exc:
-                return self.MyException(exc)
+        con=sqlite3.connect(self.DIRBD)
+        var_cursor=con.cursor()
+        try:
+            var_cursor.execute(script)
+            con.commit()
+            return var_cursor.lastrowid
+        except Exception as exc:
+            return self.MyException(exc)
     
     '''
     ---Crea una tabla---
