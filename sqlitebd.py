@@ -109,8 +109,7 @@ class SQLite():
                     script+=f'{key}="{val}",'
                 else:
                     script+=f'{key}={val},'
-            else:         
-                #Falta eliminar la ultima coma
+            else: 
                 script=script[:-1]       
                 if isinstance(valCond,str):
                     script+=f' WHERE {colCond}="{valCond}"'
