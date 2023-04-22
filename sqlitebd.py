@@ -103,16 +103,17 @@ class SQLite():
         try:
             cursor=con.cursor()    
             #--Contruyendo el sql ---------------------------                      
-            script=f'UPDATE {tabla} SET('# WHERE {campo}='
+            script=f'UPDATE {tabla} SET '# WHERE {campo}='
             for key,val in valores.items():               
                 if isinstance(val,str):
-                    script+=f'{key}="{val}"'
+                    script+=f'{key}="{val}",'
                 else:
-                    script+=f'{key}={val}'
+                    script+=f'{key}={val},'
             else:         
-                #Falta eliminar la ultima coma       
+                #Falta eliminar la ultima coma
+                script=script[:-1]       
                 if isinstance(valCond,str):
-                    script+=f') WHERE {colCond}="{valCond}"'
+                    script+=f' WHERE {colCond}="{valCond}"'
                 else:
                     script+=f') WHERE {colCond}={valCond}'
             #-------------------------------------------------           
