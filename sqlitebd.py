@@ -1,6 +1,7 @@
 import sqlite3
 
 class SQLite():
+    """ Clase para el trabajo con BD SQLite """
 
     def __init__(self,dirBDsqlite) -> None:
         self.DIRBD=dirBDsqlite+'.db'
